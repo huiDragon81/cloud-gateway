@@ -14,22 +14,27 @@ spring:
             postLogger: true
       routes:
         - id: first-service
-          uri: lb://MY-FIRST-SERVICE
-          filters:
-            - CustomFilter
+          uri: lb://USER-SERVICE
           predicates:
-            - Path=/first-service/**
-        - id: second-service
-          uri: lb://MY-FIRST-SERVICE
-          filters:
-            - name: CustomFilter
-            - name: LogFilter
-              args:
-                baseMessage: log filter
-                preLogger: true
-                postLogger: true
-          predicates:
-            - Path=/second-service/**
+            - Path=/user-service/**
+
+#        - id: first-service
+#          uri: lb://MY-FIRST-SERVICE
+#          filters:
+#            - CustomFilter
+#          predicates:
+#            - Path=/first-service/**
+#        - id: second-service
+#          uri: lb://MY-FIRST-SERVICE
+#          filters:
+#            - name: CustomFilter
+#            - name: LogFilter
+#              args:
+#                baseMessage: log filter
+#                preLogger: true
+#                postLogger: true
+#          predicates:
+#            - Path=/second-service/**
 
 eureka:
   client:
