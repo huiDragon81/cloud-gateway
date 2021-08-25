@@ -16,7 +16,28 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
+            - Path=/user-service/login
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/users
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
             - Path=/user-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
@@ -25,23 +46,6 @@ spring:
           uri: lb://ORDER-SERVICE
           predicates:
             - Path=/order-service/**
-#        - id: first-service
-#          uri: lb://MY-FIRST-SERVICE
-#          filters:
-#            - CustomFilter
-#          predicates:
-#            - Path=/first-service/**
-#        - id: second-service
-#          uri: lb://MY-FIRST-SERVICE
-#          filters:
-#            - name: CustomFilter
-#            - name: LogFilter
-#              args:
-#                baseMessage: log filter
-#                preLogger: true
-#                postLogger: true
-#          predicates:
-#            - Path=/second-service/**
 
 eureka:
   client:
@@ -49,3 +53,7 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
+
+token:
+  expiration_time: 864000000
+  secret: user_token
